@@ -43,7 +43,7 @@ from osgeo import gdal
 def matches_non_existing_error_msg(msg):
     m1 = "does not exist in the file system,\nand is not recognized as a supported dataset name.\n" in msg
     m2 = msg == 'No such file or directory'
-    m1 or m2
+    return m1 or m2
 
 def basic_test_1():
     gdal.PushErrorHandler( 'CPLQuietErrorHandler' )
@@ -52,7 +52,6 @@ def basic_test_1():
     if ds is None and matches_non_existing_error_msg(gdal.GetLastErrorMsg()):
         return 'success'
     else:
-        print gdal.GetLastErrorMsg()
         gdaltest.post_reason('did not get expected error message, got %s' % gdal.GetLastErrorMsg())
         return 'fail'
 
@@ -63,7 +62,6 @@ def basic_test_2():
     if ds is None and matches_non_existing_error_msg(gdal.GetLastErrorMsg()):
         return 'success'
     else:
-        print gdal.GetLastErrorMsg()
         gdaltest.post_reason('did not get expected error message, got %s' % gdal.GetLastErrorMsg())
         return 'fail'
 
@@ -74,7 +72,6 @@ def basic_test_3():
     if ds is None and matches_non_existing_error_msg(gdal.GetLastErrorMsg()):
         return 'success'
     else:
-        print gdal.GetLastErrorMsg()
         gdaltest.post_reason('did not get expected error message, got %s' % gdal.GetLastErrorMsg())
         return 'fail'
 
@@ -85,7 +82,6 @@ def basic_test_4():
     if ds is None and matches_non_existing_error_msg(gdal.GetLastErrorMsg()):
         return 'success'
     else:
-        print gdal.GetLastErrorMsg()
         gdaltest.post_reason('did not get expected error message, got %s' % gdal.GetLastErrorMsg())
         return 'fail'
 
@@ -119,13 +115,12 @@ def basic_test_7_internal():
     except:
         # Special case: we should still be able to get the error message
         # until we call a new GDAL function
-        if gdal.GetLastErrorMsg() != non_existing_error_msg:
+        if not matches_non_existing_error_msg(gdal.GetLastErrorMsg()):
             gdaltest.post_reason('did not get expected error message, got %s' % gdal.GetLastErrorMsg())
             return 'fail'
 
         if gdal.GetLastErrorType() == 0:
-            gdaltest.post_reason('did not get expected error type, got %s' % gdal.GetLastErrorMsg())
-            print gdal.GetLastErrorMsg()
+            gdaltest.post_reason('did not get expected error type')
             return 'fail'
 
         # Should issue an implicit CPLErrorReset()
