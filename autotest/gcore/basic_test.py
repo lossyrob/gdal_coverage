@@ -40,13 +40,16 @@ from osgeo import gdal
 # Nothing exciting here. Just trying to open non existing files,
 # or empty names, or files that are not valid datasets...
 
-non_existing_error_msg = 'No such file or directory'
+def matches_non_existing_error_msg(msg):
+    m1 = "does not exist in the file system,\nand is not recognized as a supported dataset name.\n" in msg
+    m2 = msg == 'No such file or directory'
+    m1 or m2
 
 def basic_test_1():
     gdal.PushErrorHandler( 'CPLQuietErrorHandler' )
     ds = gdal.Open('non_existing_ds', gdal.GA_ReadOnly)
     gdal.PopErrorHandler()
-    if ds is None and gdal.GetLastErrorMsg() == non_existing_error_msg:
+    if ds is None and matches_non_existing_error_msg(gdal.GetLastErrorMsg()):
         return 'success'
     else:
         print gdal.GetLastErrorMsg()
@@ -57,7 +60,7 @@ def basic_test_2():
     gdal.PushErrorHandler( 'CPLQuietErrorHandler' )
     ds = gdal.Open('non_existing_ds', gdal.GA_Update)
     gdal.PopErrorHandler()
-    if ds is None and gdal.GetLastErrorMsg() == non_existing_error_msg:
+    if ds is None and matches_non_existing_error_msg(gdal.GetLastErrorMsg()):
         return 'success'
     else:
         print gdal.GetLastErrorMsg()
@@ -68,7 +71,7 @@ def basic_test_3():
     gdal.PushErrorHandler( 'CPLQuietErrorHandler' )
     ds = gdal.Open('', gdal.GA_ReadOnly)
     gdal.PopErrorHandler()
-    if ds is None and gdal.GetLastErrorMsg() == non_existing_error_msg:
+    if ds is None and matches_non_existing_error_msg(gdal.GetLastErrorMsg()):
         return 'success'
     else:
         print gdal.GetLastErrorMsg()
@@ -79,7 +82,7 @@ def basic_test_4():
     gdal.PushErrorHandler( 'CPLQuietErrorHandler' )
     ds = gdal.Open('', gdal.GA_Update)
     gdal.PopErrorHandler()
-    if ds is None and gdal.GetLastErrorMsg() == non_existing_error_msg:
+    if ds is None and matches_non_existing_error_msg(gdal.GetLastErrorMsg()):
         return 'success'
     else:
         print gdal.GetLastErrorMsg()
