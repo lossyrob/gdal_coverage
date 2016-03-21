@@ -49,6 +49,8 @@ def basic_test_1():
     if ds is None and gdal.GetLastErrorMsg() == non_existing_error_msg:
         return 'success'
     else:
+        print gdal.GetLastErrorMsg()
+        gdaltest.post_reason('did not get expected error message, got %s' % gdal.GetLastErrorMsg())
         return 'fail'
 
 def basic_test_2():
@@ -58,6 +60,8 @@ def basic_test_2():
     if ds is None and gdal.GetLastErrorMsg() == non_existing_error_msg:
         return 'success'
     else:
+        print gdal.GetLastErrorMsg()
+        gdaltest.post_reason('did not get expected error message, got %s' % gdal.GetLastErrorMsg())
         return 'fail'
 
 def basic_test_3():
@@ -67,6 +71,8 @@ def basic_test_3():
     if ds is None and gdal.GetLastErrorMsg() == non_existing_error_msg:
         return 'success'
     else:
+        print gdal.GetLastErrorMsg()
+        gdaltest.post_reason('did not get expected error message, got %s' % gdal.GetLastErrorMsg())
         return 'fail'
 
 def basic_test_4():
@@ -76,6 +82,8 @@ def basic_test_4():
     if ds is None and gdal.GetLastErrorMsg() == non_existing_error_msg:
         return 'success'
     else:
+        print gdal.GetLastErrorMsg()
+        gdaltest.post_reason('did not get expected error message, got %s' % gdal.GetLastErrorMsg())
         return 'fail'
 
 def basic_test_5():
@@ -109,11 +117,12 @@ def basic_test_7_internal():
         # Special case: we should still be able to get the error message
         # until we call a new GDAL function
         if gdal.GetLastErrorMsg() != non_existing_error_msg:
-            gdaltest.post_reason('did not get expected error message')
+            gdaltest.post_reason('did not get expected error message, got %s' % gdal.GetLastErrorMsg())
             return 'fail'
 
         if gdal.GetLastErrorType() == 0:
-            gdaltest.post_reason('did not get expected error type')
+            gdaltest.post_reason('did not get expected error type, got %s' % gdal.GetLastErrorMsg())
+            print gdal.GetLastErrorMsg()
             return 'fail'
 
         # Should issue an implicit CPLErrorReset()
